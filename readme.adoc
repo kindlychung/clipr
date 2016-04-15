@@ -1,0 +1,10 @@
+= clipr: Commandline clipboard tool
+
+== Install
+
+This is an abstraction layer over osx's `pbcopy/pbpaste` and linux's `xsel`.
+On a mac this is builtin. On debian/ubuntu/arch/redhat machine you need to install `xsel`.
+
+== Usage
+
+See `clipr --help`.

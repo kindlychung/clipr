@@ -1,0 +1,14 @@
+[package]
+
+name = "clipr"
+version = "0.0.1"
+authors = [ "Kaiyin Zhong <kindlychung@gmail.com>" ]
+
+[[bin]]
+
+name = "clipr"
+
+[dependencies]
+docopt = "0.6"
+rustc-serialize = "0.3"
+os_type="0.5.0"
