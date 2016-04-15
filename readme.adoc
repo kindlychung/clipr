@@ -6,6 +6,7 @@ This is an abstraction layer over osx's `pbcopy/pbpaste` and linux's `xsel`.
 On a mac this is builtin. On debian/ubuntu/arch/redhat machine you need to install `xsel`. Then:
 
 [source,bash]
+
 --------------
 cargo install --git https://github.com/kindlychung/clipr
 ------------
@@ -17,6 +18,7 @@ See `clipr --help`.
 == Examples
 
 [source,bash]
+
 ---------------
 echo "some string" | clipr input 
 clipr output
