@@ -1,6 +1,6 @@
+#![feature(stmt_expr_attributes)]
 extern crate rustc_serialize;
 extern crate docopt;
-extern crate os_type;
 use std::process::{Stdio, Command};
 
 
@@ -9,21 +9,21 @@ use docopt::Docopt;
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
 fn get_clip_cmds() -> Result<(Command, Command), &'static str> {
-    match os_type::current_platform() {
-        os_type::OSType::OSX => Ok((Command::new("pbcopy"), Command::new("pbpaste"))),
-        os_type::OSType::Ubuntu |
-        os_type::OSType::Arch |
-        os_type::OSType::Debian |
-        os_type::OSType::Redhat => {
-            let mut cmd1 = Command::new("xsel");
-            let mut cmd2 = Command::new("xsel");
-            cmd1.arg("-bi");
-            cmd2.arg("-bo");
-            return Ok((cmd1, cmd2));
-        }
-        _ => Err("Unknown OS."),
+    {
+    #![cfg(target_os = "linux")]
+        let mut cmd1 = Command::new("xsel");
+        let mut cmd2 = Command::new("xsel");
+        cmd1.arg("-bi");
+        cmd2.arg("-bo");
+        return Ok((cmd1, cmd2));
     }
+    {
+    #![cfg(target_os = "macos")]
+        return Ok((Command::new("pbcopy"), Command::new("pbpaste")));
+    }
+    return Err("Unsupported OS.");
 }
+
 
 const USAGE: &'static str = "
 clipr

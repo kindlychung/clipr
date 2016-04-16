@@ -11,4 +11,3 @@ name = "clipr"
 [dependencies]
 docopt = "0.6"
 rustc-serialize = "0.3"
-os_type="0.5.0"
