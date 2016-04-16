@@ -9,6 +9,13 @@ const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
 fn get_clip_cmds() -> Result<(Command, Command), &'static str> {
     if cfg!(target_os = "linux") {
+        match Command::new("xsel").spawn() {
+            Ok(_) => {}
+            _ => {
+                return Err("☹ xsel not found. You can install by (on Debian/Ubuntu):\n  sudo \
+                            apt-get install xsel");
+            }
+        };
         let mut cmd1 = Command::new("xsel");
         let mut cmd2 = Command::new("xsel");
         cmd1.arg("-bi");
@@ -18,8 +25,7 @@ fn get_clip_cmds() -> Result<(Command, Command), &'static str> {
     if cfg!(target_os = "macos") {
         return Ok((Command::new("pbcopy"), Command::new("pbpaste")));
     }
-    let res: Result<(Command, Command), &'static str> = Err("Unsupported OS.");
-    return res;
+    return Err("Unsupported OS.");
 }
 
 
