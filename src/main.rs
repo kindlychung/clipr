@@ -1,6 +1,7 @@
 extern crate rustc_serialize;
 extern crate docopt;
 use std::process::{Stdio, Command};
+use std::io::Write;
 
 
 use docopt::Docopt;
@@ -12,8 +13,8 @@ fn get_clip_cmds() -> Result<(Command, Command), &'static str> {
         match Command::new("xsel").spawn() {
             Ok(_) => {}
             _ => {
-                return Err("☹ xsel not found. You can install by (on Debian/Ubuntu):\n  sudo \
-                            apt-get install xsel");
+				writeln!(&mut std::io::stderr, "☹ xsel not found. You can install by (on Debian/Ubuntu):\n  sudo apt-get install xsel");
+                return Err("xsel not found");
             }
         };
         let mut cmd1 = Command::new("xsel");
