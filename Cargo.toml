@@ -4,10 +4,17 @@ name = "clipr"
 version = "0.0.1"
 authors = [ "Kaiyin Zhong <kindlychung@gmail.com>" ]
 
-[[bin]]
-
-name = "clipr"
 
 [dependencies]
 docopt = "0.6"
 rustc-serialize = "0.3"
+
+[dependencies.clipboard]
+git = "https://github.com/aweinstock314/rust-clipboard" 
+rev = "4fe9892d7bf8bac075aa60493c6eee7a83e24b7f"
+
+[[bin]]
+
+name = "clipr"
+
+

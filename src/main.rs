@@ -1,38 +1,13 @@
 extern crate rustc_serialize;
+extern crate clipboard;
 extern crate docopt;
-use std::process::{Stdio, Command};
-use std::io::Write;
-
 
 use docopt::Docopt;
+use std::io::{self, Read};
+use clipboard::ClipboardContext;
+
 
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
-
-fn get_clip_cmds() -> Result<(Command, Command), &'static str> {
-    if cfg!(target_os = "linux") {
-        match Command::new("xsel").spawn() {
-            Ok(_) => {}
-            _ => {
-                writeln!(&mut std::io::stderr(),
-                         "☹ xsel not found. You can install by (on Debian/Ubuntu):\n  sudo \
-                          apt-get install xsel");
-                std::process::exit(1);
-            }
-        };
-        let mut cmd1 = Command::new("sh");
-        let mut cmd2 = Command::new("sh");
-        cmd1.arg("-c");
-        cmd2.arg("-c");
-        cmd1.arg("xsel -bi");
-        cmd2.arg("xsel -bo");
-        return Ok((cmd1, cmd2));
-    }
-    if cfg!(target_os = "macos") {
-        return Ok((Command::new("pbcopy"), Command::new("pbpaste")));
-    }
-    return Err("Unsupported OS.");
-}
-
 
 const USAGE: &'static str = "
 clipr
@@ -58,31 +33,25 @@ struct Args {
     cmd_version: bool,
 }
 
-fn run(cmd: &mut Command) {
-    assert!(cmd.stdout(Stdio::inherit())
-               .stderr(Stdio::inherit())
-               .status()
-               .unwrap()
-               .success());
-}
-
 fn main() {
     let args: Args = Docopt::new(USAGE)
                          .and_then(|d| d.decode())
                          .unwrap_or_else(|e| e.exit());
 
 
-    let (mut cmd_in, mut cmd_out) = get_clip_cmds().unwrap();
+    let mut ctx: ClipboardContext = ClipboardContext::new().unwrap();
     if args.cmd_input {
-        run(&mut cmd_in);
+        let mut buffer = String::new();
+        let _ = io::stdin().read_to_string(&mut buffer);
+        let _ = ctx.set_contents(buffer);
+        return;
     }
 
     if args.cmd_output {
-        run(&mut cmd_out);
-
+        print!("{}", ctx.get_contents().unwrap());
     }
 
     if args.cmd_version {
-        println!("{}", VERSION);
+        print!("{}", VERSION);
     }
 }
