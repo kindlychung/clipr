@@ -13,7 +13,7 @@ fn get_clip_cmds() -> Result<(Command, Command), &'static str> {
         match Command::new("xsel").spawn() {
             Ok(_) => {}
             _ => {
-				writeln!(&mut std::io::stderr, "☹ xsel not found. You can install by (on Debian/Ubuntu):\n  sudo apt-get install xsel");
+				writeln!(&mut std::io::stderr(), "☹ xsel not found. You can install by (on Debian/Ubuntu):\n  sudo apt-get install xsel");
                 return Err("xsel not found");
             }
         };
