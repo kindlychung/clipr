@@ -13,14 +13,18 @@ fn get_clip_cmds() -> Result<(Command, Command), &'static str> {
         match Command::new("xsel").spawn() {
             Ok(_) => {}
             _ => {
-				writeln!(&mut std::io::stderr(), "☹ xsel not found. You can install by (on Debian/Ubuntu):\n  sudo apt-get install xsel");
-				std::process::exit(1);
+                writeln!(&mut std::io::stderr(),
+                         "☹ xsel not found. You can install by (on Debian/Ubuntu):\n  sudo \
+                          apt-get install xsel");
+                std::process::exit(1);
             }
         };
-        let mut cmd1 = Command::new("xsel");
-        let mut cmd2 = Command::new("xsel");
-        cmd1.arg("-bi");
-        cmd2.arg("-bo");
+        let mut cmd1 = Command::new("sh");
+        let mut cmd2 = Command::new("sh");
+        cmd1.arg("-c");
+        cmd2.arg("-c");
+        cmd1.arg("xsel -bi");
+        cmd2.arg("xsel -bo");
         return Ok((cmd1, cmd2));
     }
     if cfg!(target_os = "macos") {
