@@ -1,4 +1,3 @@
-#![feature(stmt_expr_attributes)]
 extern crate rustc_serialize;
 extern crate docopt;
 use std::process::{Stdio, Command};
@@ -9,19 +8,18 @@ use docopt::Docopt;
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
 fn get_clip_cmds() -> Result<(Command, Command), &'static str> {
-    {
-    #![cfg(target_os = "linux")]
+    if cfg!(target_os = "linux") {
         let mut cmd1 = Command::new("xsel");
         let mut cmd2 = Command::new("xsel");
         cmd1.arg("-bi");
         cmd2.arg("-bo");
         return Ok((cmd1, cmd2));
     }
-    {
-    #![cfg(target_os = "macos")]
+    if cfg!(target_os = "macos") {
         return Ok((Command::new("pbcopy"), Command::new("pbpaste")));
     }
-    return Err("Unsupported OS.");
+    let res: Result<(Command, Command), &'static str> = Err("Unsupported OS.");
+    return res;
 }
 
 
