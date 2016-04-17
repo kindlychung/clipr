@@ -39,8 +39,8 @@ fn main() {
                          .unwrap_or_else(|e| e.exit());
 
 
-    let mut ctx: ClipboardContext = ClipboardContext::new().unwrap();
     if args.cmd_input {
+        let mut ctx: ClipboardContext = ClipboardContext::new().unwrap();
         let mut buffer = String::new();
         let _ = io::stdin().read_to_string(&mut buffer);
         let _ = ctx.set_contents(buffer);
@@ -48,6 +48,7 @@ fn main() {
     }
 
     if args.cmd_output {
+        let ctx: ClipboardContext = ClipboardContext::new().unwrap();
         print!("{}", ctx.get_contents().unwrap());
     }
 
