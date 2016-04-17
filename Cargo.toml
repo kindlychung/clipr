@@ -8,10 +8,11 @@ authors = [ "Kaiyin Zhong <kindlychung@gmail.com>" ]
 [dependencies]
 docopt = "0.6"
 rustc-serialize = "0.3"
+docopt_macros = "0.6"
 
 [dependencies.clipboard]
 git = "https://github.com/aweinstock314/rust-clipboard" 
-rev = "4fe9892d7bf8bac075aa60493c6eee7a83e24b7f"
+branch = "master"
 
 [[bin]]
 

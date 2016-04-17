@@ -1,42 +1,35 @@
+#![feature(plugin)]
+#![plugin(docopt_macros)]
 extern crate rustc_serialize;
 extern crate clipboard;
 extern crate docopt;
 
-use docopt::Docopt;
 use std::io::{self, Read};
 use clipboard::ClipboardContext;
 
-
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
-const USAGE: &'static str = "
+docopt!(Args derive Debug, "
 clipr
 
 Usage:
   clipr input
   clipr output
   clipr version
+  clipr --help
 
 Options:
   --help    Print this message.
 
 Subcommands:
   input:        Put content from stdin into clipboard.
-  output:       Put content from clipboard into stdin. 
+  output:       Put content from clipboard into stdin.
   version:      Print version.
-";
+");
 
-#[derive(Debug, RustcDecodable)]
-struct Args {
-    cmd_input: bool,
-    cmd_output: bool,
-    cmd_version: bool,
-}
 
 fn main() {
-    let args: Args = Docopt::new(USAGE)
-                         .and_then(|d| d.decode())
-                         .unwrap_or_else(|e| e.exit());
+    let args: Args = Args::docopt().decode().unwrap_or_else(|e| e.exit());
 
 
     if args.cmd_input {
